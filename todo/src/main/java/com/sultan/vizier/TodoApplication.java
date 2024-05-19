@@ -13,9 +13,4 @@ public class TodoApplication {
 		SpringApplication.run(TodoApplication.class, args);
 	}
 
-	@GetMapping("/")
-	public String hello() {
-		return "Hello World!";
-	}
-
 }
