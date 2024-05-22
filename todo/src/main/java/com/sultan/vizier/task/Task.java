@@ -36,7 +36,7 @@ public class Task {
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	//change to enum
+	//TODO change to enum
 	@Column(name = "status", length = 10)
 	private String status;
 
