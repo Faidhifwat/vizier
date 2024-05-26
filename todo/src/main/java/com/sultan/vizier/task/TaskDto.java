@@ -1,9 +1,12 @@
 package com.sultan.vizier.task;
 
 import java.util.List;
+import java.util.Set;
 
-import com.sultan.vizier.subtask.SubtaskDto;
+import com.sultan.vizier.subtask.Subtask;
 
+import com.sultan.vizier.tag.Tag;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,10 +14,13 @@ import lombok.Setter;
 @Getter
 public class TaskDto {
 
+	@NotBlank(message = "Title is mandatory")
 	private String title;
 
 	private String status;
 
-	private List<SubtaskDto> subtask;
+	private List<Subtask> subtasks;
+
+	private Set<Tag> tags;
 
 }

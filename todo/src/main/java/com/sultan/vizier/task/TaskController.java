@@ -1,5 +1,6 @@
 package com.sultan.vizier.task;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,10 +14,13 @@ public class TaskController {
 	@Autowired
 	private TaskService taskService;
 
-	// From DTO create a task (use MapStruc)
+	@Autowired
+	private TaskMapper taskMapper;
 
-	@PostMapping("/")
-	public TaskDto create(@RequestBody TaskDto taskDto) {
+	@PostMapping("/create")
+	public TaskDto create(@Valid @RequestBody TaskDto taskDto) {
+		Task task = taskMapper.taskDtoToTask(taskDto);
+		taskService.create(task);
 		return taskDto;
 	}
 }

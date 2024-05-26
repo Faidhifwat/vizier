@@ -1,22 +1,15 @@
 package com.sultan.vizier.task;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
+import com.sultan.vizier.subtask.Subtask;
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import com.sultan.vizier.tag.Tag;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.GeneratedValue;
 
 import lombok.Setter;
 import lombok.Getter;
@@ -51,7 +44,10 @@ public class Task {
 	@Column(name = "date_due")
 	private LocalDateTime dateDue;
 
-	@ManyToMany
+	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+	private List<Subtask> subtasks;
+
+	@ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
 	@JoinTable(
 		name = "task_tag",
 		joinColumns = @JoinColumn(name = "task_id"),
