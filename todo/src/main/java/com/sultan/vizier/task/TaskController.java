@@ -2,13 +2,14 @@ package com.sultan.vizier.task;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sultan.vizier.subtask.SubtaskDto;
-
 @RestController
+@RequestMapping(value = "/task")
 public class TaskController {
 
 	@Autowired
@@ -17,10 +18,12 @@ public class TaskController {
 	@Autowired
 	private TaskMapper taskMapper;
 
-	@PostMapping("/create")
-	public TaskDto create(@Valid @RequestBody TaskDto taskDto) {
+	@PostMapping(value = "/create", consumes = "application/json")
+	public ResponseEntity<String> create(@Valid @RequestBody TaskDto taskDto) {
 		Task task = taskMapper.taskDtoToTask(taskDto);
 		taskService.create(task);
-		return taskDto;
+		return ResponseEntity.ok()
+				.body("All good! I think");
+		// TODO return failed if something wrong
 	}
 }

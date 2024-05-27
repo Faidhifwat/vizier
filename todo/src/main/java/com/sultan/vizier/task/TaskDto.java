@@ -3,9 +3,10 @@ package com.sultan.vizier.task;
 import java.util.List;
 import java.util.Set;
 
-import com.sultan.vizier.subtask.Subtask;
+import com.sultan.vizier.comment.CommentDto;
+import com.sultan.vizier.subtask.SubtaskDto;
+import com.sultan.vizier.tag.TagDto;
 
-import com.sultan.vizier.tag.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,8 +20,10 @@ public class TaskDto {
 
 	private String status;
 
-	private List<Subtask> subtasks;
+	private List<SubtaskDto> subtasks;
 
-	private Set<Tag> tags;
+	private Set<TagDto> tags;
+
+	private List<CommentDto> comments;
 
 }

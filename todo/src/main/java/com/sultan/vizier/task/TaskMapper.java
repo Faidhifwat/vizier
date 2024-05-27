@@ -8,5 +8,7 @@ import org.mapstruct.ReportingPolicy;
 public interface TaskMapper {
 
 	@Mapping(source = "subtasks", target = "subtasks")
+	@Mapping(source = "comments", target = "comments")
+	@Mapping(source = "tags", target = "tags")
 	Task taskDtoToTask(TaskDto task);
 }

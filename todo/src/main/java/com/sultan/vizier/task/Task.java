@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import com.sultan.vizier.comment.Comment;
 import com.sultan.vizier.subtask.Subtask;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,9 +30,9 @@ public class Task {
 	@Column(name = "title", nullable = false)
 	private String title;
 
-	//TODO change to enum
-	@Column(name = "status", length = 10)
-	private String status;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "status", length = 15)
+	private Status status = Status.IN_PROGRESS;
 
 	@Column(name = "date_created", nullable = false, updatable = false)
 	@CreationTimestamp
@@ -55,4 +56,14 @@ public class Task {
 	)
 	private Set<Tag> tags;
 
+	@OneToMany(mappedBy = "task" , cascade = CascadeType.ALL)
+	private List<Comment> comments;
+
+}
+
+enum Status {
+	IN_PROGRESS,
+	DUE,
+	ARCHIVED,
+	COMPLETED
 }
