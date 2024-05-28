@@ -11,7 +11,11 @@ public class SubtaskService {
     @Autowired
     private SubtaskRepository subtaskRepository;
 
-    public void create(List<Subtask> subtask) {
+    @Autowired
+    private SubtaskMapper subtaskMapper;
+
+    public void create(List<SubtaskDto> subtaskDto) {
+       List<Subtask> subtask = subtaskMapper.subtaskDtoToSubtask(subtaskDto);
        subtaskRepository.saveAll(subtask);
     }
 }

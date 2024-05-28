@@ -1,4 +1,4 @@
-package com.sultan.vizier.subtask;
+package com.sultan.vizier.comment;
 
 import com.sultan.vizier.task.Task;
 import com.sultan.vizier.task.TaskService;
@@ -11,22 +11,19 @@ import java.util.List;
 import java.util.Objects;
 
 @RestController
-@RequestMapping(value = "/subtask")
-public class SubtaskController {
+@RequestMapping(value = "/comment")
+public class CommentController {
 
     @Autowired
-    private SubtaskMapper subtaskMapper;
+    CommentService commentService;
 
     @Autowired
-    private SubtaskService subtaskService;
-
-    @Autowired
-    private TaskService taskService;
+    TaskService taskService;
 
     @PostMapping(value = "/create/{task_id}", consumes = "application/json")
     public ResponseEntity<String> create(
-            @RequestBody List<SubtaskDto> subtaskDto,
-            @PathVariable("task_id") Long task_id) {
+            @PathVariable("task_id") Long task_id,
+            @RequestBody List<CommentDto> commentDtos) {
 
         Task task = taskService.findById(task_id).orElse(null);
 
@@ -35,10 +32,11 @@ public class SubtaskController {
                     .body("Task not found");
         }
 
-        subtaskDto.forEach(s -> s.setTask(task));
-        subtaskService.create(subtaskDto);
+        commentDtos.forEach(c -> c.setTask(task));
+        commentService.create(commentDtos);
 
         return ResponseEntity.ok()
-                .body("Subtask created!");
+                .body("Comment created!");
+        //TODO Add better checking on comment/tag/subtask/task
     }
 }
