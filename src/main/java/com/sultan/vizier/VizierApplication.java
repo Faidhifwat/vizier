@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @SpringBootApplication
-public class TodoApplication {
+public class VizierApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(TodoApplication.class, args);
+		SpringApplication.run(VizierApplication.class, args);
 	}
 
 }
