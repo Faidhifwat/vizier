@@ -1,5 +1,6 @@
 package com.sultan.vizier.subtask;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sultan.vizier.task.Task;
 
 import jakarta.persistence.Column;
@@ -24,6 +25,7 @@ public class Subtask {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@JsonBackReference(value = "task-subtask")
 	@ManyToOne
 	@JoinColumn(name = "task_id")
 	private Task task;

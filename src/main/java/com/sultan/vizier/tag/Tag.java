@@ -2,6 +2,9 @@ package com.sultan.vizier.tag;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.sultan.vizier.task.Task;
 
 import jakarta.persistence.Column;
@@ -18,6 +21,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Tag {
 
 	@Id
@@ -27,6 +31,7 @@ public class Tag {
 	@Column(name = "name", nullable = false)
 	private String name;
 
+	@JsonIgnore
 	@ManyToMany(mappedBy = "tags")
 	private Set<Task> task;
 }

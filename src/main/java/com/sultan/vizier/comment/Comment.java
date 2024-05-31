@@ -1,5 +1,6 @@
 package com.sultan.vizier.comment;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.sultan.vizier.task.Task;
 
 import jakarta.persistence.Column;
@@ -24,6 +25,7 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@JsonBackReference(value = "task-comment")
 	@ManyToOne
 	@JoinColumn(name = "task_id")
 	private Task task;

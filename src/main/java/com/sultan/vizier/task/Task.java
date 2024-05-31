@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.*;
 import com.sultan.vizier.comment.Comment;
 import com.sultan.vizier.subtask.Subtask;
 import jakarta.persistence.*;
@@ -21,6 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Entity
 @Table(name = "task")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Task {
 
 	@Id
@@ -45,6 +47,7 @@ public class Task {
 	@Column(name = "date_due")
 	private LocalDateTime dateDue;
 
+	@JsonManagedReference(value="task-subtask")
 	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
 	private List<Subtask> subtasks;
 
@@ -54,8 +57,10 @@ public class Task {
 		joinColumns = @JoinColumn(name = "task_id"),
 		inverseJoinColumns = @JoinColumn(name = "tag_id")
 	)
+	//TODO look into weird stuff happen when adding task_tag manually
 	private Set<Tag> tags;
 
+	@JsonManagedReference(value = "task-comment")
 	@OneToMany(mappedBy = "task" , cascade = CascadeType.ALL)
 	private List<Comment> comments;
 
