@@ -1,5 +1,6 @@
 package com.sultan.vizier.task;
 
+import com.sultan.vizier.tag.TagDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,5 +32,11 @@ public class TaskController {
 		List<Task> tasks = taskService.getAllTask();
 		return ResponseEntity.ok()
 				.body(tasks);
+	}
+
+	@PostMapping(value = "/add/{task_id}", consumes = "application/json")
+	public String addTag(@PathVariable(name = "task_id") Long taskId, @RequestBody TagDto tagDto) {
+		taskService.addTags(taskId, tagDto);
+		return "DONE";
 	}
 }

@@ -20,5 +20,5 @@ public class TagController {
 
         return ResponseEntity.ok()
                 .body("Tag created!");
-    }
+    } //TODO handle if tag with same name already created
 }
