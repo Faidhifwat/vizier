@@ -1,9 +1,13 @@
 package com.sultan.vizier.tag;
 
+import com.sultan.vizier.task.Task;
+import com.sultan.vizier.task.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 public class TagService {
@@ -13,6 +17,9 @@ public class TagService {
 
     @Autowired
     private TagRepository tagRepository;
+
+    @Autowired
+    private TaskService taskService;
 
     public ResponseEntity<String> create(TagDto tagDto) {
         if (tagRepository.findByName(tagDto.getName()).isPresent()) {
@@ -25,5 +32,24 @@ public class TagService {
 
         return ResponseEntity.ok()
                 .body("Tag created");
+    }
+
+    public ResponseEntity<String> create(Long taskId, TagDto tagDto) {
+        Task task = taskService.findById(taskId)
+                .orElseThrow(() -> new IllegalArgumentException("Task with id " + taskId + " not found"));
+
+        Tag tag = tagRepository.findByName(tagDto.getName())
+                .orElseGet(() -> {
+                    Tag createTag = tagMapper.tagDtoToTag(tagDto);
+                    return tagRepository.save(createTag);
+                });
+
+        if (Objects.nonNull(task.getTags())) {
+            task.getTags().add(tag);
+        }
+        taskService.createTask(task);
+
+        return ResponseEntity.ok()
+                .body(String.format("Tag with name %s added to task ID %s", tagDto.getName(), taskId));
     }
 }

@@ -23,22 +23,10 @@ public class SubtaskController {
     @Autowired
     private TaskService taskService;
 
-    @PostMapping(value = "/create/{task_id}", consumes = "application/json")
+    @PostMapping(value = "/create/{taskId}", consumes = "application/json")
     public ResponseEntity<String> create(
             @RequestBody List<SubtaskDto> subtaskDto,
-            @PathVariable("task_id") Long task_id) {
-
-        Task task = taskService.findById(task_id).orElse(null);
-
-        if (!Objects.nonNull(task)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Task not found");
-        }
-
-        subtaskDto.forEach(s -> s.setTask(task));
-        subtaskService.create(subtaskDto);
-
-        return ResponseEntity.ok()
-                .body("Subtask created!");
+            @PathVariable("taskId") Long taskId) {
+        return subtaskService.create(taskId, subtaskDto);
     }
 }

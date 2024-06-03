@@ -1,6 +1,8 @@
 package com.sultan.vizier.task;
 
 import com.sultan.vizier.comment.Comment;
+import com.sultan.vizier.comment.CommentDto;
+import com.sultan.vizier.comment.CommentMapper;
 import com.sultan.vizier.subtask.Subtask;
 
 import com.sultan.vizier.tag.Tag;
@@ -31,6 +33,9 @@ public class TaskService {
 	@Autowired
 	private TaskMapper taskMapper;
 
+	@Autowired
+	private CommentMapper commentMapper;
+
 	public ResponseEntity<String> create(TaskDto taskDto) {
 		Task task = taskMapper.taskDtoToTask(taskDto);
 
@@ -40,7 +45,7 @@ public class TaskService {
 		List<Comment> comments = task.getComments();
 		comments.forEach(c -> c.setTask(task));
 
-		taskRepository.save(task);
+		createTask(task);
 
 		return ResponseEntity.ok()
 				.body("Task created");
@@ -53,26 +58,12 @@ public class TaskService {
 				.body(tasks);
 	}
 
-	public ResponseEntity<String> addTags(Long taskId, TagDto tagDto) {
-		Task task = taskRepository.findById(taskId)
-				.orElseThrow(() -> new IllegalArgumentException("Task with id " + taskId + " not found"));
-
-		Tag tag = tagRepository.findByName(tagDto.getName())
-				.orElseGet(() -> {
-					Tag createTag = tagMapper.tagDtoToTag(tagDto);
-					return tagRepository.save(createTag);
-				});
-
-		if (Objects.nonNull(task.getTags())) {
-				task.getTags().add(tag);
-		}
-		taskRepository.save(task);
-
-		return ResponseEntity.ok()
-				.body(String.format("Tag with name %s added to task ID %s", tagDto.getName(), taskId));
-	}
 
 	public Optional<Task> findById(Long id) {
 		return taskRepository.findById(id);
+	}
+
+	public void createTask(Task task) {
+		taskRepository.save(task);
 	}
 }

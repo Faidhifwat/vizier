@@ -17,26 +17,9 @@ public class CommentController {
     @Autowired
     CommentService commentService;
 
-    @Autowired
-    TaskService taskService;
-
-    @PostMapping(value = "/create/{task_id}", consumes = "application/json")
-    public ResponseEntity<String> create(
-            @PathVariable("task_id") Long task_id,
-            @RequestBody List<CommentDto> commentDtos) {
-
-        Task task = taskService.findById(task_id).orElse(null);
-
-        if (!Objects.nonNull(task)) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Task not found");
-        }
-
-        commentDtos.forEach(c -> c.setTask(task));
-        commentService.create(commentDtos);
-
-        return ResponseEntity.ok()
-                .body("Comment created!");
-        //TODO Add better checking on comment/tag/subtask/task
+    @PostMapping(value = "/create/{taskId}", consumes = "application/json")
+    public ResponseEntity<String> addComment(@PathVariable(name = "taskId") Long taskId,
+                                             @RequestBody List<CommentDto> commentDtos) {
+        return commentService.create(taskId, commentDtos);
     }
 }
