@@ -1,14 +1,13 @@
 package com.sultan.vizier.subtask;
 
+import com.sultan.vizier.aop.LogExecutionTime;
 import com.sultan.vizier.task.Task;
 import com.sultan.vizier.task.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class SubtaskService {
@@ -22,6 +21,7 @@ public class SubtaskService {
     @Autowired
     private TaskService taskService;
 
+    @LogExecutionTime
     public ResponseEntity<String> create(Long taskId, List<SubtaskDto> subtaskDto) {
         Task task = taskService.findById(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("Task with id " + taskId + " not found"));
@@ -34,6 +34,6 @@ public class SubtaskService {
         taskService.createTask(task);
 
         return ResponseEntity.ok()
-               .body("Subtask created");
+               .body(String.format("Subtask created for task ID %s", taskId));
     }
 }

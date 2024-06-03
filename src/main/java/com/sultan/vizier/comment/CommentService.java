@@ -1,7 +1,7 @@
 package com.sultan.vizier.comment;
 
+import com.sultan.vizier.aop.LogExecutionTime;
 import com.sultan.vizier.task.Task;
-import com.sultan.vizier.task.TaskRepository;
 import com.sultan.vizier.task.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +21,7 @@ public class CommentService {
     @Autowired
     private TaskService taskService;
 
+    @LogExecutionTime
     public ResponseEntity<String> create(Long taskId, List<CommentDto> commentDto) {
         Task task = taskService.findById(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("Task with id " + taskId + " not found"));
@@ -33,6 +34,6 @@ public class CommentService {
         taskService.createTask(task);
 
         return ResponseEntity.ok()
-                .body("done add comment");
+                .body(String.format("Comment added to task ID %s", taskId));
     }
 }

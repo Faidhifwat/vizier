@@ -1,5 +1,6 @@
 package com.sultan.vizier.tag;
 
+import com.sultan.vizier.aop.LogExecutionTime;
 import com.sultan.vizier.task.Task;
 import com.sultan.vizier.task.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ public class TagService {
     @Autowired
     private TaskService taskService;
 
+    @LogExecutionTime
     public ResponseEntity<String> create(TagDto tagDto) {
         if (tagRepository.findByName(tagDto.getName()).isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT)
@@ -34,6 +36,7 @@ public class TagService {
                 .body("Tag created");
     }
 
+    @LogExecutionTime
     public ResponseEntity<String> create(Long taskId, TagDto tagDto) {
         Task task = taskService.findById(taskId)
                 .orElseThrow(() -> new IllegalArgumentException("Task with id " + taskId + " not found"));

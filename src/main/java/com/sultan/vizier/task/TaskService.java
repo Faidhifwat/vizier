@@ -1,21 +1,18 @@
 package com.sultan.vizier.task;
 
+import com.sultan.vizier.aop.LogExecutionTime;
 import com.sultan.vizier.comment.Comment;
-import com.sultan.vizier.comment.CommentDto;
 import com.sultan.vizier.comment.CommentMapper;
 import com.sultan.vizier.subtask.Subtask;
-
-import com.sultan.vizier.tag.Tag;
-import com.sultan.vizier.tag.TagDto;
 import com.sultan.vizier.tag.TagMapper;
 import com.sultan.vizier.tag.TagRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -36,6 +33,7 @@ public class TaskService {
 	@Autowired
 	private CommentMapper commentMapper;
 
+	@LogExecutionTime
 	public ResponseEntity<String> create(TaskDto taskDto) {
 		Task task = taskMapper.taskDtoToTask(taskDto);
 
@@ -51,6 +49,7 @@ public class TaskService {
 				.body("Task created");
 	}
 
+	@LogExecutionTime
 	public ResponseEntity<List<Task>> getAllTask() {
 		List<Task> tasks = taskRepository.findAll(Sort.by(Sort.Direction.DESC, "dateCreated"));
 
