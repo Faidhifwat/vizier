@@ -16,9 +16,6 @@ public class TagController {
 
     @PostMapping(value = "/create")
     public ResponseEntity<String> create(@RequestBody TagDto tagDto) {
-        tagService.create(tagDto);
-
-        return ResponseEntity.ok()
-                .body("Tag created!");
-    } //TODO handle if tag with same name already created
+        return tagService.create(tagDto);
+    }
 }

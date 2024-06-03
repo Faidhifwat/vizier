@@ -20,23 +20,16 @@ public class TaskController {
 
 	@PostMapping(value = "/create", consumes = "application/json")
 	public ResponseEntity<String> create(@Valid @RequestBody TaskDto taskDto) {
-		Task task = taskMapper.taskDtoToTask(taskDto);
-		taskService.create(task);
-		return ResponseEntity.ok()
-				.body("All good! I think");
-		// TODO return failed if something wrong
+		return taskService.create(taskDto);
 	}
 
 	@GetMapping()
 	public ResponseEntity<List<Task>> get() {
-		List<Task> tasks = taskService.getAllTask();
-		return ResponseEntity.ok()
-				.body(tasks);
+		return taskService.getAllTask();
 	}
 
-	@PostMapping(value = "/add/{task_id}", consumes = "application/json")
-	public String addTag(@PathVariable(name = "task_id") Long taskId, @RequestBody TagDto tagDto) {
-		taskService.addTags(taskId, tagDto);
-		return "DONE";
+	@PostMapping(value = "/add-tag/{task_id}", consumes = "application/json")
+	public ResponseEntity<String> addTag(@PathVariable(name = "task_id") Long taskId, @RequestBody TagDto tagDto) {
+		return taskService.addTags(taskId, tagDto);
 	}
 }

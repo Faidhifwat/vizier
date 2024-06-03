@@ -9,6 +9,7 @@ import com.sultan.vizier.tag.TagMapper;
 import com.sultan.vizier.tag.TagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +28,12 @@ public class TaskService {
 	@Autowired
 	private TagMapper tagMapper;
 
-	public void create(Task task) {
+	@Autowired
+	private TaskMapper taskMapper;
+
+	public ResponseEntity<String> create(TaskDto taskDto) {
+		Task task = taskMapper.taskDtoToTask(taskDto);
+
 		List<Subtask> subtasks = task.getSubtasks();
 		subtasks.forEach(st -> st.setTask(task));
 
@@ -35,13 +41,19 @@ public class TaskService {
 		comments.forEach(c -> c.setTask(task));
 
 		taskRepository.save(task);
+
+		return ResponseEntity.ok()
+				.body("Task created");
 	}
 
-	public List<Task> getAllTask() {
-		return taskRepository.findAll(Sort.by(Sort.Direction.DESC, "dateCreated"));
+	public ResponseEntity<List<Task>> getAllTask() {
+		List<Task> tasks = taskRepository.findAll(Sort.by(Sort.Direction.DESC, "dateCreated"));
+
+		return ResponseEntity.ok()
+				.body(tasks);
 	}
 
-	public void addTags(Long taskId, TagDto tagDto) {
+	public ResponseEntity<String> addTags(Long taskId, TagDto tagDto) {
 		Task task = taskRepository.findById(taskId)
 				.orElseThrow(() -> new IllegalArgumentException("Task with id " + taskId + " not found"));
 
@@ -55,6 +67,9 @@ public class TaskService {
 				task.getTags().add(tag);
 		}
 		taskRepository.save(task);
+
+		return ResponseEntity.ok()
+				.body(String.format("Tag with name %s added to task ID %s", tagDto.getName(), taskId));
 	}
 
 	public Optional<Task> findById(Long id) {
